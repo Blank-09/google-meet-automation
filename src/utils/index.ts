@@ -1,6 +1,9 @@
+import readline from "readline";
+
 import { CSVData } from "./csv";
 import { parse } from "date-format-parse";
-import { LOCAL_STORAGE_PATH, MEET_LINKS, MeetLinks, SubjectCode } from "../constants";
+import { LOCAL_STORAGE_PATH, MEET_LINKS } from "../constants";
+import { MeetLinks, SubjectCode } from "@/types/LocalStorage";
 import { JSONStorage } from "node-localstorage";
 
 type NextClass =
@@ -50,7 +53,7 @@ async function findMyNextClass(csv_data: CSVData): Promise<NextClass> {
   }
 
   // If there are no more classes for the day
-  return { status: "done", message: "No more classes for the day" };
+  return { status: "done", message: "🎉 You are done for today!" };
 }
 
 export function printClassTimeTable(csv_data: CSVData) {
@@ -60,14 +63,39 @@ export function printClassTimeTable(csv_data: CSVData) {
   const keys = Object.keys(table);
 
   for (var i = keys.length - 1; i >= 0; i--) {
-    obj[+keys[i] + 1] = obj[+keys[i]];
+    // @ts-ignore
+    obj["Day Order " + (keys.length - +keys[i])] = obj[+keys[i]];
+    delete obj[+keys[i]];
   }
 
-  delete obj["0"];
+  delete obj[0];
 
   console.table(obj);
 }
 
+function exitOnKeypress() {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  console.log("Press `enter` to exit");
+
+  rl.on("line", () => {
+    rl.close();
+    process.exit(0);
+  });
+
+  rl.on("SIGINT", () => {
+    rl.close();
+    process.exit(0);
+  });
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 const localStorage = new JSONStorage(LOCAL_STORAGE_PATH);
 
-export { findMyNextClass, localStorage };
+export { exitOnKeypress, findMyNextClass, localStorage, sleep };

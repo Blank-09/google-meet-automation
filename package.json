@@ -5,7 +5,7 @@
   "main": "./dist/src/index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn src/index.ts",
-    "start": "node build.js && node ./dist/src/index.js",
+    "start": "node build.js && cross-env NODE_ENV=production node ./dist/src/index.js",
     "build": "tsc"
   },
   "keywords": [
@@ -17,6 +17,7 @@
   "dependencies": {
     "@inquirer/prompts": "^5.0.2",
     "chalk": "^5.3.0",
+    "cross-env": "^7.0.3",
     "date-format-parse": "^0.2.7",
     "dotenv": "^16.4.5",
     "neat-csv": "^7.0.0",
