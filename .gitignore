@@ -1,0 +1,4 @@
+node_modules/
+.localstorage/
+dist/
+.env
