@@ -5,6 +5,7 @@ import { DayOrderType } from "./types/LocalStorage";
 import { exitOnKeypress, findMyNextClass, localStorage, printClassTimeTable, sleep } from "./utils";
 import { parse_csv } from "./utils/csv";
 import { format } from "date-format-parse";
+import { addToggleVideoShortcut } from "./extensions/shortcuts";
 
 const csv_data = parse_csv(CSV_PATH);
 
@@ -74,6 +75,16 @@ async function automate() {
   // await page.click('[data-promo-anchor-id="psRWwc"]'); // Video button
 
   await page.click('[data-promo-anchor-id="w5gBed"]'); // Join now button
+
+  await addToggleVideoShortcut(page);
+
+  page.on("load", async () => {
+    if (page.url().includes("meet.google.com")) {
+      await page.waitForSelector('[data-promo-anchor-id="w5gBed"]');
+      await page.click('[data-promo-anchor-id="hw0c9"]');
+      await addToggleVideoShortcut(page);
+    }
+  });
 
   // TODO: Implement intraction with class
 
