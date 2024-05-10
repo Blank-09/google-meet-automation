@@ -21,7 +21,7 @@ type NextClass =
 
 async function findMyNextClass(csv_data: CSVData): Promise<NextClass> {
   const now = new Date();
-  const dayOrder = 5;
+  const dayOrder = localStorage.getItem("dayOrder").dayOrder as number;
 
   // Assuming the first day of the week is Sunday and represented by 0 in the timetable array
   const todayClasses = csv_data.timetable[dayOrder - 1];
@@ -59,17 +59,13 @@ async function findMyNextClass(csv_data: CSVData): Promise<NextClass> {
 export function printClassTimeTable(csv_data: CSVData) {
   console.log("📅 Class Time Table");
   const { schedule, timetable, ...table } = csv_data;
-  const obj = { ...table };
+  const obj = {};
   const keys = Object.keys(table);
 
-  for (var i = keys.length - 1; i >= 0; i--) {
+  for (var i = 0; i < keys.length; i++) {
     // @ts-ignore
-    obj["Day Order " + (keys.length - +keys[i])] = obj[+keys[i]];
-    delete obj[+keys[i]];
+    obj["Day order " + (+keys[i] + 1)] = table[keys[i]];
   }
-
-  delete obj[0];
-
   console.table(obj);
 }
 
