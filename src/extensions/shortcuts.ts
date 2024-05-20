@@ -2,6 +2,8 @@ import { sleep } from "../utils";
 import { Page } from "puppeteer-core";
 
 async function addToggleVideoShortcut(page: Page) {
+  await sleep(500);
+
   // Click on the Ellipsis button
   await page.waitForSelector('[data-promo-anchor-id="aGHX8e"]');
   await page.click('[data-promo-anchor-id="aGHX8e"]');

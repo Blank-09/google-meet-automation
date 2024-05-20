@@ -47,6 +47,7 @@ async function automate() {
     executablePath: EXECUTABLE_PATH,
     userDataDir: USER_DATA_DIR,
     ignoreDefaultArgs: ["--enable-automation"],
+    slowMo: 100,
     args: [
       "--profile-directory=" + PROFILE_DIRECTORY,
       "--start-fullscreen",
@@ -74,12 +75,14 @@ async function automate() {
   await page.click('[data-promo-anchor-id="hw0c9"]'); // Microphone button
   // await page.click('[data-promo-anchor-id="psRWwc"]'); // Video button
 
+  await sleep(1000);
   await page.click('[data-promo-anchor-id="w5gBed"]'); // Join now button
 
   await addToggleVideoShortcut(page);
 
   page.on("load", async () => {
     if (page.url().includes("meet.google.com")) {
+      await sleep(1000);
       await page.waitForSelector('[data-promo-anchor-id="w5gBed"]');
       await page.click('[data-promo-anchor-id="hw0c9"]');
       await addToggleVideoShortcut(page);
